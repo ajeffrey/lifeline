@@ -1,0 +1,12 @@
+.DS_Store
+dist
+.data
+node_modules
+npm-debug.log*
+*.log
+junit.xml
+.env
+.yarnclean
+keys
+storybook-static
+db.sqlite3

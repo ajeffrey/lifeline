@@ -1,0 +1,21 @@
+{
+  "name": "lifeline",
+  "description": "Personal planning app",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "build": "wsrun --exclude-missing build",
+    "develop": "wsrun --exclude-missing develop"
+  },
+  "dependencies": {
+    "wsrun": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.6.3"
+  }
+}
