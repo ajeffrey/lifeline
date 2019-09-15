@@ -38,7 +38,7 @@ module.exports = {
         loader: 'awesome-typescript-loader',
         exclude: /node_modules/,
         options: {
-          transpileOnly: true
+          transpileOnly: process.env.NODE_ENV === 'development',
         }
       },
     ]

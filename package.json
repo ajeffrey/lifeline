@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "wsrun --exclude-missing build",
-    "develop": "wsrun --exclude-missing develop"
+    "develop": "wsrun --exclude-missing develop",
+    "db": "yarn workspace @ll/server run db"
   },
   "dependencies": {
     "wsrun": "^5.0.0"

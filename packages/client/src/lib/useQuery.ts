@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Rx from 'rxjs';
 import SocketContext from 'src/API/SocketContext';
 
 export default function useQuery<T>(query: any, watch: any[]) {

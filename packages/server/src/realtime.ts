@@ -8,8 +8,29 @@ import CommandDispatcher from './CommandDispatcher';
 import TokenGenerator from './TokenGenerator';
 import LoginCommandHandler from './commands/LoginCommandHandler';
 import ReauthCommandHandler from './commands/ReauthCommandHandler';
+import { IAnyEvent } from '@ll/shared/src/events';
+import CreateTaskCommandHandler from './commands/CreateTaskCommandHandler';
+import TaskCreatedEventHandler from './events/TaskCreatedEventHandler';
+import EventHandler from './EventHandler';
+import InboxQuery from './queries/InboxQuery';
+import TaskDeletedEventHandler from './events/TaskDeletedEventHandler';
+import DeleteTaskCommandHandler from './commands/DeleteTaskCommandHandler';
 
 export default (db: Database, publicKey: string, privateKey: string) => {
+  const events$ = new Rx.Subject<IAnyEvent>();
+  const tokenGenerator = new TokenGenerator(privateKey);
+  const loginCommandHandler = new LoginCommandHandler(db);
+  const reauthCommandHandler = new ReauthCommandHandler(publicKey);
+  const createTaskCommandHandler = new CreateTaskCommandHandler(events$);
+  const deleteTaskCommandHandler = new DeleteTaskCommandHandler(events$);
+
+  const taskCreatedEventHandler = new TaskCreatedEventHandler(db);
+  const taskDeletedEventHandler = new TaskDeletedEventHandler(db);
+  const eventHandler = new EventHandler(taskCreatedEventHandler, taskDeletedEventHandler);
+  events$.subscribe(event => eventHandler.handle(event));
+
+  const inboxQuery = new InboxQuery(db, events$);
+
   const server = SockJS.createServer({
     sockjs_url: 'http://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js',
     prefix: '/sockjs'
@@ -17,15 +38,18 @@ export default (db: Database, publicKey: string, privateKey: string) => {
   
   server.on('connection', connection => {
     const userId = new Rx.BehaviorSubject<string | null>(null);
+    const commandDispatcher = new CommandDispatcher(
+      userId,
+      tokenGenerator,
+      loginCommandHandler,
+      reauthCommandHandler,
+      createTaskCommandHandler,
+      deleteTaskCommandHandler
+    );
 
-    const queryFinder = new QueryFinder(userId);
+    const queryFinder = new QueryFinder(userId, inboxQuery);
     const queryManager = new QueryManager(queryFinder);
-
-    const tokenGenerator = new TokenGenerator(privateKey);
-    const loginCommandHandler = new LoginCommandHandler(db);
-    const reauthCommandHandler = new ReauthCommandHandler(publicKey);
-    const commandDispatcher = new CommandDispatcher(userId, tokenGenerator, loginCommandHandler, reauthCommandHandler);
-
+    
     connection.on('data', data => {
       const message = JSON.parse(data);
 

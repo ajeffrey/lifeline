@@ -1,5 +1,4 @@
 import styled, { createGlobalStyle } from 'styled-components';
-import * as chroma from 'chroma-js';
 
 export const GlobalStyle = createGlobalStyle`
   html, body, div, span, object, iframe,
@@ -63,7 +62,6 @@ export const Frame = styled.div`
 export const Container = styled.div`
   flex-grow: 1;
   flex-direction: column;
-  background: ${chroma.lch(100, 5, 180).css()};
 `;
 
 export const Sidebar = styled.div`

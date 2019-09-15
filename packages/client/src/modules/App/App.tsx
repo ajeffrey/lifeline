@@ -12,11 +12,11 @@ export default () => {
       <Loader promise={API()}>
         {state => {
           switch(state.type) {
-            case 'loading': return <div>Loading...</div>;
+            case 'loading': return <div></div>;
             case 'error': return <div>Error! {state.error.toString()}</div>;
             case 'ready': return (
               <SocketContext.Provider value={{ socket: state.data }}>
-                <Protected />;
+                <Protected />
               </SocketContext.Provider>
             );
           }

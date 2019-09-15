@@ -4,7 +4,7 @@ import { ReauthCommand } from '@ll/shared/src/commands/ReauthCommand';
 import Socket from 'src/API/Socket';
 import SocketContext from 'src/API/SocketContext';
 import Login from 'src/modules/Login';
-import Dashboard from 'src/modules/Dashboard';
+import Gateway from 'src/modules/Gateway';
 
 interface IProps {
   socket: Socket;
@@ -35,7 +35,6 @@ export default () => {
   const [state, setState] = React.useState<IState>({ type: 'loading' });
 
   const handleLogin = React.useCallback((report: ILoginReport) => {
-    console.log('REPORT', report);
     switch(report.type) {
       case 'loggedIn':
         localStorage.setItem('token', report.token);
@@ -67,7 +66,7 @@ export default () => {
       
     case 'loggedIn':
       localStorage.setItem('token', state.token);
-      return <Dashboard />;
+      return <Gateway />;
 
     case 'loggingIn':
       return <div>Logging in...</div>;

@@ -3,7 +3,7 @@ import { Database } from "sqlite3";
 import { ILoginCommand } from '@ll/shared/src/commands/LoginCommand';
 
 const QUERY = `
-  SELECT id, password FROM users WHERE email = ?
+  SELECT aggregateId, password FROM users WHERE email = ?
 `;
 
 export default class LoginCommandHandler {
@@ -16,7 +16,7 @@ export default class LoginCommandHandler {
           return reject(err);
         }
         
-        resolve(compareSync(password, row.password) ? row.id : null);
+        resolve(compareSync(password, row.password) ? row.aggregateId : null);
       });
     });
   }

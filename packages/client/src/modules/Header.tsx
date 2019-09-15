@@ -1,48 +1,56 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 import * as chroma from 'chroma-js';
-import { format } from 'date-fns';
-import { Context } from 'src/modules/Provider';
 
 export default () => {
-  const context = React.useContext(Context);
-  const { now, timebox } = context;
-
   return (
-    <Header background={timebox ? chroma.lch(...timebox.context.colour) : undefined}>
-      <ContextTitle>lifeline</ContextTitle>
-      <Clock>{format(now, 'HH:mm:ss')}</Clock>
+    <Header>
+      <Category to="/inbox" activeClassName="active"><i className="fa fa-fw fa-inbox" /></Category>
+      <Category to="/today"><i className="fa fa-fw fa-calendar-day" /></Category>
+      <Expanse />
+      <Logo><i className="far fa-fw fa-heart-rate" /></Logo>
     </Header>
   );
 };
 
-const darken = (colour: chroma.Color) => colour.set('lch.l', colour.get('lch.l') - 10).css();
-const lighten = (colour: chroma.Color) => colour.set('lch.l', colour.get('lch.l') + 10).css();
-
-
-export const Header = styled.div<{ background?: chroma.Color }>`
+const Header = styled.div`
   display: flex;
-  flex-direction: row;
-  height: 40px;
-  background: ${({ background }) => background ? `linear-gradient(to right, ${darken(background)}, ${lighten(background)})` : '#333'};
+  flex-direction: column;
+  width: 50px;
+  background: ${chroma.mix(chroma.lch(55, 35, 245), 'black', .1).css()};
   color: white;
   align-items: center;
 `;
 
-export const Clock = styled.div`
-  font-size: 16px;
-  padding: 0 10px;
-  align-self: stretch;
-  line-height: 40px;
-  background: rgba(0, 0, 0, 0.25);
+const Logo = styled.div`
+  font-size: 20px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  margin-left: 15px;
+  line-height: 50px;
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.25);
+  text-align: center;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(0, 0, 0, 0.5);
 `;
 
-export const ContextTitle = styled.div`
-  font-size: 16px;
-  font-weight: normal;
-  flex-grow: 1;
+const Category = styled(NavLink)`
+  line-height: 50px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  color: ${chroma.mix(chroma.lch(55, 35, 245), 'white', .35).css()};
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  padding-left: 10px;
+  &:hover {
+    color: white;
+  }
+  &.active {
+    color: white;
+    background: rgba(0, 0, 0, 0.25);
+  }
 `;
+
+const Expanse = styled.div`
+  flex-grow: 1;
+`;
+
