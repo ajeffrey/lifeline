@@ -103,8 +103,7 @@ const Shadow = animated(styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(2px);
+  background: rgba(255, 255, 255, 0.75);
 `);
 
 const Modal = animated(styled.form`

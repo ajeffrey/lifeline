@@ -17,10 +17,6 @@ interface INotification {
   message: string;
 }
 
-interface IState {
-  notifications: INotification[];
-}
-
 export default ({ children }: IProps) => {
   const [cancelMap] = React.useState(() => new WeakMap());
   const [notifications, setNotifications] = React.useState<INotification[]>([]);
@@ -46,11 +42,11 @@ export default ({ children }: IProps) => {
   };
 
   const success = (message: string) => {
-    setNotifications(append({ type: 'success', id: generate(), message }));
+    setNotifications(append<INotification>({ type: 'success', id: generate(), message }));
   }
 
   const error = (message: string) => {
-    setNotifications(append({ type: 'error', id: generate(), message }));
+    setNotifications(append<INotification>({ type: 'error', id: generate(), message }));
   }
 
   return (

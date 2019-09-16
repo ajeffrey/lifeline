@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import { ICard } from '@ll/shared/src/types';
 import { Transition, animated } from 'react-spring/renderprops';
 import { Title, Header } from 'src/styles';
+import Branch from './Branch';
+import Progress from './Progress';
 
 interface IProps {
   card: ICard | null;
 }
 
-export default ({ card }: IProps) => {
+export default React.forwardRef(({ card }: IProps, ref: React.Ref<HTMLDivElement>) => {
+  const [selected, setSelected] = React.useState<string | null>(null);
+  
   const paneTransition = {
     native: true,
     unique: true,
@@ -21,16 +25,21 @@ export default ({ card }: IProps) => {
   return (
     <Transition {...paneTransition}>
       {card => props => card && (
-        <CardViewer style={props}>
+        <CardViewer style={props} ref={ref}>
           <Header>
             <Title>{card.name}</Title>
+            <Progress steps={3} current={0} />
           </Header>
           <Question>What type of card is this?</Question>
+          <Branches>
+            <Branch icon="fal fa-check-circle" title="Task" onClick={() => setSelected('task')} selected={selected === 'task'} />
+            <Branch icon="fal fa-calendar-day" title="Event" onClick={() => setSelected('event')} selected={selected === 'event'} />
+          </Branches>
         </CardViewer>
       )}
     </Transition>
   );
-}
+});
 
 const CardViewer = animated(styled.div`
   flex-grow: 1;
@@ -42,17 +51,11 @@ const CardViewer = animated(styled.div`
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25), 0 2px 3px rgba(0, 0, 0, 0.25);
 `);
 
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Question = styled.div`
-  font-weight: bold;
+  padding: 5px 0 10px;
 `;
 
-const Branches 
-
-const Branch = styled.div`
-
+const Branches = styled.div`
+  display: flex;
+  flex-direction: row;
 `;

@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import * as chroma from 'chroma-js';
+import { THEME_PRIMARY } from 'src/colors';
 
 export default () => {
   return (
@@ -18,7 +19,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   width: 50px;
-  background: ${chroma.mix(chroma.lch(55, 35, 245), 'black', .1).css()};
+  background: ${THEME_PRIMARY.css()};
   color: white;
   align-items: center;
 `;

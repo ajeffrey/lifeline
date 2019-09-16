@@ -22,6 +22,7 @@ const globalKeyMap = {
 const keyMap = {
   GO_UP: 'up',
   GO_DOWN: 'down',
+  SWITCH: 'tab',
 };
 
 export default React.memo(({ cards, selected, onSelect }: IProps) => {
@@ -110,14 +111,14 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
           selectCard(nextCard);
         }
       }
+    },
+    SWITCH: () => {
+
     }
   };
 
   const globalHandlers = {
-    GO_UP: () => {
-      console.log('GLBOAL UP');
-      selectCard(selected);
-    },
+    GO_UP: () => {},
     GO_DOWN: () => {
       console.log('GLOBAL');
       if(!selected) {

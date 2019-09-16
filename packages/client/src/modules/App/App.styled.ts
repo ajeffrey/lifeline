@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
+import { THEME_PRIMARY } from 'src/colors';
 
 export const GlobalStyle = createGlobalStyle`
   html, body, div, span, object, iframe,
@@ -42,6 +43,9 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     display: flex;
     flex-direction: column;
+  }
+  *:focus {
+    outline: 2px solid ${THEME_PRIMARY.css()};
   }
 `;
 

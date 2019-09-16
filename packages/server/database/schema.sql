@@ -11,6 +11,7 @@ CREATE INDEX users_email ON users (email);
 
 CREATE TABLE cards (
   id INTEGER PRIMARY KEY,
+  type VARCHAR(10).
   aggregateId VARCHAR(255),
   creatorId INTEGER,
   name VARCHAR(255)
