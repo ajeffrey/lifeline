@@ -1,17 +1,17 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ITask } from '@ll/shared/src/types';
+import { ICard } from '@ll/shared/src/types';
 import { HotKeys } from 'react-hotkeys';
 
 interface IProps {
-  task: ITask;
+  card: ICard;
   selected: boolean;
   onFocus(): any;
   onDelete(): any;
   style?: any;
 }
 
-export default React.forwardRef(({ task, selected, onFocus, onDelete, style }: IProps, ref: React.Ref<HTMLDivElement>) => {
+export default React.forwardRef(({ card, selected, onFocus, onDelete, style }: IProps, ref: React.Ref<HTMLDivElement>) => {
   const handleDelete = (e) => {
     e && e.preventDefault();
     e && e.stopPropagation();
@@ -20,10 +20,10 @@ export default React.forwardRef(({ task, selected, onFocus, onDelete, style }: I
   
   return (
     <HotKeys keyMap={{ DELETE: 'del' }} handlers={{ DELETE: handleDelete }} allowChanges>
-      <Task ref={ref} tabIndex={0} key={task.id} selected={selected} onFocus={onFocus} style={style}>
-        <Name selected={selected}>{task.name}</Name>
+      <Card ref={ref} tabIndex={0} key={card.id} selected={selected} onFocus={onFocus} style={style}>
+        <Name selected={selected}>{card.name}</Name>
         <DeleteButton onClick={handleDelete}><i className="fal fa-fw fa-times" /></DeleteButton>
-      </Task>
+      </Card>
     </HotKeys>
   );
 });
@@ -40,19 +40,16 @@ const DeleteButton = styled.button`
   }
 `;
 
-const Task = styled.div<{ selected: boolean }>`
+const Card = styled.div<{ selected: boolean }>`
   display: flex;
   flex-direction: row;
   position: relative;
   border: 1px solid transparent;
+  margin-left: 10px;
   ${({ selected }) => selected ? `
     // background: white;
     font-weight: 600;
     // border-color: #ddd;
-    &:focus {
-      // background: #fffff0;
-      // border-color: #bbbb00;
-    }
   ` : ''}
   &:hover ${DeleteButton} {
     display: block;
@@ -61,7 +58,7 @@ const Task = styled.div<{ selected: boolean }>`
 
 const Name = styled.div<{ selected: boolean }>`
   flex-grow: 1;
-  padding: 5px 10px 5px 15px;
+  padding: 5px;
   ${({ selected }) => selected && 'font-weight: 600;'}
   cursor: pointer;
 `;

@@ -1,14 +1,14 @@
 import { Database } from "sqlite3";
-import { ITaskCreatedEvent } from "@ll/shared/src/events/TaskCreatedEvent";
+import { ICardCreatedEvent } from "@ll/shared/src/events/CardCreatedEvent";
 
 const QUERY = `
-  INSERT INTO tasks (aggregateId, creatorId, name) VALUES (?, ?, ?)
+  INSERT INTO cards (aggregateId, creatorId, name) VALUES (?, ?, ?)
 `;
 
-export default class TaskCreatedEventHandler {
+export default class CardCreatedEventHandler {
   constructor(private _db: Database) {}
 
-  handle(event: ITaskCreatedEvent) {
+  handle(event: ICardCreatedEvent) {
     const { id, creatorId, name } = event.payload;
     this._db.run(QUERY, id, creatorId, name, err => {
       if(err) {

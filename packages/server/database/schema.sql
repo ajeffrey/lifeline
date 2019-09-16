@@ -9,12 +9,12 @@ CREATE TABLE users (
 CREATE INDEX users_aggregateId ON users (aggregateId);
 CREATE INDEX users_email ON users (email);
 
-CREATE TABLE tasks (
+CREATE TABLE cards (
   id INTEGER PRIMARY KEY,
   aggregateId VARCHAR(255),
   creatorId INTEGER,
   name VARCHAR(255)
 );
 
-CREATE INDEX tasks_aggregateId ON tasks (aggregateId);
-CREATE INDEX tasks_creatorId ON tasks (creatorId);
+CREATE INDEX cards_aggregateId ON cards (aggregateId);
+CREATE INDEX cards_creatorId ON cards (creatorId);

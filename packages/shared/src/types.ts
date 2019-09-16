@@ -7,7 +7,7 @@ export interface IToken {
   exp: number;
 }
 
-export interface ITask {
+export interface ICard {
   id: string;
   creatorId: string;
   name: string;

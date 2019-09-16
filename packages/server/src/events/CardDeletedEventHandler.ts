@@ -1,14 +1,14 @@
 import { Database } from "sqlite3";
-import { ITaskDeletedEvent } from "@ll/shared/src/events/TaskDeletedEvent";
+import { ICardDeletedEvent } from "@ll/shared/src/events/CardDeletedEvent";
 
 const QUERY = `
-  DELETE FROM tasks WHERE aggregateId = ?
+  DELETE FROM cards WHERE aggregateId = ?
 `;
 
-export default class TaskDeletedEventHandler {
+export default class CardDeletedEventHandler {
   constructor(private _db: Database) {}
 
-  handle(event: ITaskDeletedEvent) {
+  handle(event: ICardDeletedEvent) {
     const { id } = event.payload;
     this._db.run(QUERY, id, err => {
       if(err) {

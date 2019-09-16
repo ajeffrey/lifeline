@@ -9,24 +9,24 @@ import TokenGenerator from './TokenGenerator';
 import LoginCommandHandler from './commands/LoginCommandHandler';
 import ReauthCommandHandler from './commands/ReauthCommandHandler';
 import { IAnyEvent } from '@ll/shared/src/events';
-import CreateTaskCommandHandler from './commands/CreateTaskCommandHandler';
-import TaskCreatedEventHandler from './events/TaskCreatedEventHandler';
+import CreateCardCommandHandler from './commands/CreateCardCommandHandler';
+import CardCreatedEventHandler from './events/CardCreatedEventHandler';
 import EventHandler from './EventHandler';
 import InboxQuery from './queries/InboxQuery';
-import TaskDeletedEventHandler from './events/TaskDeletedEventHandler';
-import DeleteTaskCommandHandler from './commands/DeleteTaskCommandHandler';
+import CardDeletedEventHandler from './events/CardDeletedEventHandler';
+import DeleteCardCommandHandler from './commands/DeleteCardCommandHandler';
 
 export default (db: Database, publicKey: string, privateKey: string) => {
   const events$ = new Rx.Subject<IAnyEvent>();
   const tokenGenerator = new TokenGenerator(privateKey);
   const loginCommandHandler = new LoginCommandHandler(db);
   const reauthCommandHandler = new ReauthCommandHandler(publicKey);
-  const createTaskCommandHandler = new CreateTaskCommandHandler(events$);
-  const deleteTaskCommandHandler = new DeleteTaskCommandHandler(events$);
+  const createCardCommandHandler = new CreateCardCommandHandler(events$);
+  const deleteCardCommandHandler = new DeleteCardCommandHandler(events$);
 
-  const taskCreatedEventHandler = new TaskCreatedEventHandler(db);
-  const taskDeletedEventHandler = new TaskDeletedEventHandler(db);
-  const eventHandler = new EventHandler(taskCreatedEventHandler, taskDeletedEventHandler);
+  const cardCreatedEventHandler = new CardCreatedEventHandler(db);
+  const cardDeletedEventHandler = new CardDeletedEventHandler(db);
+  const eventHandler = new EventHandler(cardCreatedEventHandler, cardDeletedEventHandler);
   events$.subscribe(event => eventHandler.handle(event));
 
   const inboxQuery = new InboxQuery(db, events$);
@@ -43,8 +43,8 @@ export default (db: Database, publicKey: string, privateKey: string) => {
       tokenGenerator,
       loginCommandHandler,
       reauthCommandHandler,
-      createTaskCommandHandler,
-      deleteTaskCommandHandler
+      createCardCommandHandler,
+      deleteCardCommandHandler
     );
 
     const queryFinder = new QueryFinder(userId, inboxQuery);

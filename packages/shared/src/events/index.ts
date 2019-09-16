@@ -1,7 +1,7 @@
-import { ITaskCreatedEvent } from './TaskCreatedEvent';
-import { ITaskDeletedEvent } from './TaskDeletedEvent';
+import { ICardCreatedEvent } from './CardCreatedEvent';
+import { ICardDeletedEvent } from './CardDeletedEvent';
 
 export type IAnyEvent = (
-  ITaskCreatedEvent |
-  ITaskDeletedEvent
+  ICardCreatedEvent |
+  ICardDeletedEvent
 );

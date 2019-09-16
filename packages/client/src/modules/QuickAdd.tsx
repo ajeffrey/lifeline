@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { HotKeys, GlobalHotKeys } from 'react-hotkeys';
-import { CreateTaskCommand, ICreateTaskReport } from '@ll/shared/src/commands/CreateTaskCommand';
+import { CreateCardCommand, ICreateCardReport } from '@ll/shared/src/commands/CreateCardCommand';
 import SocketContext from 'src/API/SocketContext';
 import NotificationContext from 'src/contexts/NotificationContext';
 import { Transition, animated } from 'react-spring/renderprops';
@@ -53,13 +53,13 @@ export default () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    socket.command<ICreateTaskReport>(CreateTaskCommand(name)).then(report => {
+    socket.command<ICreateCardReport>(CreateCardCommand(name)).then(report => {
       if(report.type === 'created') {
-        success('Task created');
+        success('Card created');
         onClose();
         
       } else {
-        error('Failed to create task');
+        error('Failed to create card');
       }
     });
   };
@@ -82,7 +82,7 @@ export default () => {
           <Shadow style={{ opacity: props.opacity }}>
             <HotKeys keyMap={keyMap} handlers={hotkeyHandlers}>
               <Modal style={{ bottom: props.bottom }} onSubmit={onSubmit}>
-                <Title>Add a New Task</Title>
+                <Title>Add a New Card</Title>
                 <Input ref={setRef} type="text" value={name} onChange={onChange} onBlur={onClose} />
               </Modal>
             </HotKeys>
