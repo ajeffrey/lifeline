@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { InboxQuery, IInboxState } from '@ll/shared/src/queries/InboxQuery';
 import useQuery from 'src/lib/useQuery';
 import List from '../List';
-import { ICard } from '@ll/shared/src/types';
+import { IAnyCard } from '@ll/shared/src/types';
 import { Title, Header } from 'src/styles';
 import CardViewer from '../CardViewer';
 
@@ -11,14 +11,16 @@ export default React.memo(() => {
   const cards = useQuery<IInboxState>(InboxQuery(), []);
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
-  const setSelected = (card: ICard | null) => {
+  if(!cards) {
+    return null;
+  }
+
+  const setSelected = (card: IAnyCard | null) => {
     console.log('SELECT CARD', card);
     setSelectedId(card ? card.id : null);
   }
 
-  if(!cards) {
-    return null;
-  }
+  const selected = cards.find(card => card.id === selectedId) || null;
 
   if(cards.length === 0) {
     return (
@@ -29,8 +31,6 @@ export default React.memo(() => {
     );
   }
 
-  const selected = cards.find(card => card.id === selectedId) || null;
-
   return (
     <>
       <InboxPane>
@@ -40,7 +40,7 @@ export default React.memo(() => {
         </Header>
         <List cards={cards} selected={selected} onSelect={setSelected} />
       </InboxPane>
-      <CardViewer card={selected} />
+      {selected && <CardViewer card={selected} />}
     </>
   );
 });

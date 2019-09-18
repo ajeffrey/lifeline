@@ -9,7 +9,7 @@ export default class CreateCardCommandHandler {
 
   handle(userId: string, { name }: ICreateCardCommand) {
     const id = uuidv4();
-    this._events$.next(CardCreatedEvent({ id, creatorId: userId, name }));
+    this._events$.next(CardCreatedEvent({ id, creatorId: userId, name, kind: 'pending' }));
     return CardCreatedReport();
   }
 }

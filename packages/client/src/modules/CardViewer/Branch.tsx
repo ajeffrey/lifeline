@@ -6,35 +6,35 @@ import { THEME_PRIMARY } from 'src/colors';
 interface IProps {
   icon: string;
   title: string;
+  description: string;
   onClick(): any;
   selected: boolean;
 }
 
-export default ({ icon, title, onClick, selected }: IProps) => {
+export default ({ icon, title, description, onClick, selected }: IProps) => {
   const spring = useSpring({
     opacity: selected ? 1 : 0.25,
-    background: selected ? '#fff' : '#f6f6f6',
   });
 
   return (
-    <Branch onClick={onClick} style={spring} tabIndex={0}>
+    <Branch onClick={onClick} style={spring}>
       <Icon className={`fa-fw ${icon}`} />
-      <Name>{title}</Name>
+      <Content>
+        <Name>{title}</Name>
+        <Description>{description}</Description>
+      </Content>
     </Branch>
   )
 }
 
 const Branch = animated(styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 0 10px;
-  padding: 20px;
+  // margin: 0 10px;
   border-radius: 5px;
   color: ${THEME_PRIMARY.css()};
-
-  border: 2px solid #ddd;
 
   &:first-child {
     margin-left: 0;
@@ -44,11 +44,25 @@ const Branch = animated(styled.div`
   }
 `);
 
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px 10px 5px;
+`;
+
 const Name = styled.div`
   display: block;
-  margin-top: 10px;
+  font-weight: normal;
+  color: #333;
 `;
 
 const Icon = styled.i`
   font-size: 36px;
+  padding: 5px;
+`;
+
+const Description = styled.p`
+  font-style: italic;
+  font-size: 14px;
+  color: #999;
 `;

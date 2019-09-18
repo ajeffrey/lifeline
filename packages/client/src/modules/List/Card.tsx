@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ICard } from '@ll/shared/src/types';
+import { IAnyCard } from '@ll/shared/src/types';
 import { HotKeys } from 'react-hotkeys';
 import { Input as BaseInput } from 'src/components/Input';
 
 interface IProps {
-  card: ICard;
+  card: IAnyCard;
   selected: boolean;
   onFocus(): any;
   onDelete(): any;

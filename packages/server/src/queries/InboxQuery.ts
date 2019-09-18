@@ -6,7 +6,7 @@ import { isCardCreatedEvent } from '@ll/shared/src/events/CardCreatedEvent';
 import { isCardDeletedEvent } from '@ll/shared/src/events/CardDeletedEvent';
 
 const QUERY = `
-  SELECT aggregateId as id, creatorId, name FROM cards WHERE creatorId = ?`;
+  SELECT id, creatorId, name, kind FROM cards WHERE creatorId = ?`;
 
 export default class InboxQuery {
   constructor(private _db: Database, private _events$: Rx.Subject<IAnyEvent>) {}

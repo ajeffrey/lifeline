@@ -18,5 +18,9 @@
     "suppressExcessPropertyErrors": true,
     "suppressImplicitAnyIndexErrors": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "**/node_modules",
+    "**/dist"
+  ]
 }

@@ -11,7 +11,7 @@ export const Input = styled.input`
   line-height: inherit;
   color: inherit;
   font-weight: 300;
-  background: transparent;
+  background: white;
   border: none;
 
   &::-webkit-outer-spin-button,

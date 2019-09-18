@@ -1,1 +1,1 @@
- INSERT INTO users(aggregateId, name, email, password) VALUES ('33ae3185-75bf-49e3-bb50-6f94efdba378', 'Alex', 'alex@beacon.studio', '$2y$12$9PV0xtT4qR9PKVq3Log6b.A7uFvXIOLvu4E2adVYZokiQbVBEWf96');
+ INSERT INTO users(id, name, email, password) VALUES ('33ae3185-75bf-49e3-bb50-6f94efdba378', 'Alex', 'alex@beacon.studio', '$2y$12$9PV0xtT4qR9PKVq3Log6b.A7uFvXIOLvu4E2adVYZokiQbVBEWf96');

@@ -45,7 +45,7 @@ export const GlobalStyle = createGlobalStyle`
     flex-direction: column;
   }
   *:focus {
-    outline: 2px solid ${THEME_PRIMARY.css()};
+    outline: 2px dotted #fd9;
   }
 `;
 

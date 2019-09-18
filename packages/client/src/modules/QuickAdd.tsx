@@ -76,7 +76,7 @@ export default () => {
   };
 
   return (
-    <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers}>
+    // <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers}>
       <Transition {...transition}>
         {show => props => show && (
           <Shadow style={{ opacity: props.opacity }}>
@@ -89,7 +89,7 @@ export default () => {
           </Shadow>
         )}
       </Transition>
-    </GlobalHotKeys>
+    // </GlobalHotKeys>
   );
 }
 

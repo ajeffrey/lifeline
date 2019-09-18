@@ -2,7 +2,7 @@ import { Database } from "sqlite3";
 import { ICardCreatedEvent } from "@ll/shared/src/events/CardCreatedEvent";
 
 const QUERY = `
-  INSERT INTO cards (aggregateId, creatorId, name) VALUES (?, ?, ?)
+  INSERT INTO cards (id, creatorId, name) VALUES (?, ?, ?)
 `;
 
 export default class CardCreatedEventHandler {

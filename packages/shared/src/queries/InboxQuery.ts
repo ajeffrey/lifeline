@@ -1,10 +1,10 @@
-import { ICard } from "../types";
+import { IAnyCard } from "../types";
 
 export interface IInboxQuery {
   type: 'inbox';
 }
 
-export type IInboxState = ICard[];
+export type IInboxState = IAnyCard[];
 
 export function InboxQuery(): IInboxQuery {
   return { type: 'inbox' };

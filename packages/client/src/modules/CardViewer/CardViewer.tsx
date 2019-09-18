@@ -1,17 +1,28 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ICard } from '@ll/shared/src/types';
+import { IAnyCard, ICard } from '@ll/shared/src/types';
 import { Transition, animated } from 'react-spring/renderprops';
 import { Title, Header } from 'src/styles';
-import Branch from './Branch';
 import Progress from './Progress';
+import CardType from './CardType';
 
 interface IProps {
-  card: ICard | null;
+  card: IAnyCard;
 }
 
 export default React.forwardRef(({ card }: IProps, ref: React.Ref<HTMLDivElement>) => {
-  const [selected, setSelected] = React.useState<string | null>(null);
+  const [state, setState] = React.useState<Partial<IAnyCard> & ICard>(card);
+
+  const setKind = (kind: IAnyCard['kind']) => {
+    switch(kind) {
+      case 'task':
+        return setState(({ id, creatorId, name }) => ({ id, creatorId, name, kind: 'task' }));
+      case 'pending':
+        return setState(({ id, creatorId, name }) => ({ id, creatorId, name, kind: 'pending' }));
+      case 'event':
+        return setState(({ id, creatorId, name }) => ({ id, creatorId, name, kind: 'event' }));
+    }
+  }
   
   const paneTransition = {
     native: true,
@@ -28,13 +39,10 @@ export default React.forwardRef(({ card }: IProps, ref: React.Ref<HTMLDivElement
         <CardViewer style={props} ref={ref}>
           <Header>
             <Title>{card.name}</Title>
-            <Progress steps={3} current={0} />
           </Header>
+          <Progress steps={3} current={0} />
           <Question>What type of card is this?</Question>
-          <Branches>
-            <Branch icon="fal fa-check-circle" title="Task" onClick={() => setSelected('task')} selected={selected === 'task'} />
-            <Branch icon="fal fa-calendar-day" title="Event" onClick={() => setSelected('event')} selected={selected === 'event'} />
-          </Branches>
+          <CardType value={state.kind} onChange={kind => setKind(kind)} />
         </CardViewer>
       )}
     </Transition>
@@ -57,5 +65,6 @@ const Question = styled.div`
 
 const Branches = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
 `;

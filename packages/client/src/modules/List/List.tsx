@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { GlobalHotKeys, HotKeys } from 'react-hotkeys';
-import { ICard } from '@ll/shared/src/types';
+import { IAnyCard } from '@ll/shared/src/types';
 import NotificationContext from 'src/contexts/NotificationContext';
 import Card from './Card';
 import { Transition, Spring, animated } from 'react-spring/renderprops';
@@ -9,13 +9,12 @@ import SocketContext from 'src/API/SocketContext';
 import { DeleteCardCommand, IDeleteCardReport } from '@ll/shared/src/commands/DeleteCardCommand';
 
 interface IProps {
-  cards: ICard[];
-  selected: ICard | null;
-  onSelect(card: ICard | null): any;
+  cards: IAnyCard[];
+  selected: IAnyCard | null;
+  onSelect(card: IAnyCard | null): any;
 }
 
 const globalKeyMap = {
-  GO_UP: 'up',
   GO_DOWN: 'down',
 };
 
@@ -42,11 +41,11 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
   const cursorSpring = {
     to: {
       opacity: selected ? 1 : 0,
-      top: selected ? cards.indexOf(selected) * 35 + 10 : 0,
+      top: selected ? cards.indexOf(selected) * 33 + 10 : 0,
     }
   };
 
-  const getPreviousCard = (card: ICard) => {
+  const getPreviousCard = (card: IAnyCard) => {
     const index = cards.indexOf(card);
     if(index > 0) {
       const card = cards[index - 1];
@@ -55,13 +54,13 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
     return null;
   }
 
-  const getNextCard = (card: ICard) => {
+  const getNextCard = (card: IAnyCard) => {
     const index = cards.indexOf(card);
     const nextCard = cards[index + 1];
     return nextCard || null;
   }
 
-  const selectCard = (card: ICard | null) => {
+  const selectCard = (card: IAnyCard | null) => {
     if(card) {
       const node = refMap.get(card.id);
       if(node) {
@@ -73,7 +72,7 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
     }
   }
 
-  const onDelete = (card: ICard) => {
+  const onDelete = (card: IAnyCard) => {
     socket.command<IDeleteCardReport>(DeleteCardCommand(card.id))
       .then(report => {
         switch(report.type) {
@@ -118,7 +117,6 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
   };
 
   const globalHandlers = {
-    GO_UP: () => {},
     GO_DOWN: () => {
       console.log('GLOBAL');
       if(!selected) {
@@ -128,7 +126,7 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
   };
 
   return (
-    <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers} allowChanges>
+    <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers} allowChanges root>
       <HotKeys keyMap={keyMap} handlers={hotKeyHandlers} allowChanges>
         <CardList ref={ref}>
           <Spring {...cursorSpring}>
@@ -151,7 +149,7 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
           </Mask>
         </CardList>
       </HotKeys>
-  </GlobalHotKeys>
+   </GlobalHotKeys>
   );
 });
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from 'src/modules/Header';
+import Menu from 'src/modules/Menu';
 import QuickAdd from './QuickAdd';
 import Notifications from './Notifications';
 import Inbox from './Inbox';
@@ -11,7 +11,7 @@ export default () => {
     <BrowserRouter>
       <App>
         <Notifications>
-          <Header />
+          <Menu />
           <Frame>
             <Container>
               <Switch>

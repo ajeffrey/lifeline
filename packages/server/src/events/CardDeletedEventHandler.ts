@@ -2,7 +2,7 @@ import { Database } from "sqlite3";
 import { ICardDeletedEvent } from "@ll/shared/src/events/CardDeletedEvent";
 
 const QUERY = `
-  DELETE FROM cards WHERE aggregateId = ?
+  DELETE FROM cards WHERE id = ?
 `;
 
 export default class CardDeletedEventHandler {
