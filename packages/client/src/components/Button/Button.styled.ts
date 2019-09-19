@@ -42,24 +42,3 @@ export const ButtonGroup = styled.div`
     margin-right: -1px;
   }
 `;
-
-export const DarkButton = styled(Button)<{ _color: chroma.Color }>`
-  ${raisedControl()}
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
-  color: white;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-  outline: none;
-  position: relative;
-  ${({ _color }) => {
-    const light = chroma.mix('black', _color, .9, 'lch').css();
-    const dark = chroma.mix('black', _color, .70, 'lch').css();
-    const highlight = chroma.mix('black', _color, .6, 'lch').css();
-    return `
-    background: linear-gradient(to bottom, ${light}, ${light} 50%, ${dark} 50%, ${dark} 100%);
-    border: 1px solid  ${highlight};
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.75), 0 2px 1px rgba(0, 0, 0, .25);
-    &:hover {
-      background: ${highlight}
-    }
-  `}}
-`;

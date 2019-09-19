@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as chroma from 'chroma-js';
 import { compose } from 'ramda';
 import * as Event from 'src/lib/events';
-import { DarkButton } from 'src/components/Button';
 import * as S from './Login.styled';
 
 interface IProps {
@@ -40,7 +39,7 @@ export default function Login({ onLogin, error }: IProps) {
           <S.Input type="password" value={password} onChange={compose(setPassword, Event.value)} />
         </S.Field>
         <S.Actions>
-          <DarkButton _color={chroma.lch(65, 55, 180)}>Login</DarkButton>
+          <S.LoginButton _color={chroma.lch(65, 55, 180)}>Login</S.LoginButton>
         </S.Actions>
       </S.Form>
     </S.Layout>
