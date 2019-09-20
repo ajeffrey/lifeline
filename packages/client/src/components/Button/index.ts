@@ -1,1 +1,1 @@
-export { Button, DarkButton } from './Button.styled';
+export { Button, PrimaryButton } from './Button.styled';

@@ -1,19 +1,33 @@
+import { Database } from 'sqlite3';
 import { IAnyEvent } from '@ll/shared/src/events';
-import CardCreatedEventHandler from './events/CardCreatedEventHandler';
-import CardDeletedEventHandler from './events/CardDeletedEventHandler';
+import { Dictionary } from '@ll/shared/src/types';
+
+interface IEventHandler<T> {
+  handle(event: T): any;
+}
+
+const CREATE_EVENT_QUERY = `
+  INSERT INTO events(eventType, payload) VALUES (?, ?)
+`
 
 export default class EventHandler {
+  private _handlers: Dictionary<IEventHandler<any>>;
+
   constructor(
-    private _cardCreatedEventHandler: CardCreatedEventHandler,
-    private _cardDeletedEventHandler: CardDeletedEventHandler
-    ) {}
+    private _db: Database,
+    ) {
+      this._handlers = {};
+    }
+
+  register<T extends IAnyEvent>(type: T['type'], handler: IEventHandler<T>) {
+    this._handlers[type] = handler;
+  }
 
   handle(event: IAnyEvent) {
-    switch(event.type) {
-      case 'card-created':
-        return this._cardCreatedEventHandler.handle(event);
-      case 'card-deleted':
-        return this._cardDeletedEventHandler.handle(event);
+    if(event.type in this._handlers) {
+      this._handlers[event.type].handle(event);
     }
+
+    this._db.run(CREATE_EVENT_QUERY, event.type, JSON.stringify(event.payload));
   }
 }

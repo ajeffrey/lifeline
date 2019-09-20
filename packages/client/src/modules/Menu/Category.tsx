@@ -19,7 +19,7 @@ export default withRouter(({ location, url, icon, label, count, expanded }: IPro
 
   return (
     <Category to={url}>
-      <Icon active={active} className={`fa fa-${icon}`}>
+      <Icon active={active} className={icon}>
       </Icon>
       <Label>
         <Text active={active} style={spring}>{label}</Text>

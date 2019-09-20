@@ -6,57 +6,47 @@ import SocketContext from 'src/API/SocketContext';
 import NotificationContext from 'src/contexts/NotificationContext';
 import { Transition, animated } from 'react-spring/renderprops';
 
-interface IState {
-  open: boolean;
-  name: string;
+interface IProps {
+  isOpen: boolean;
+  onClose(): any;
 }
-
-const globalKeyMap = {
-  OPEN: 'q',
-};
 
 const keyMap = {
   CLOSE: 'esc',
 };
 
-export default () => {
+export default ({ isOpen, onClose }: IProps) => {
   const [ref, setRef] = React.useState<HTMLInputElement | null>(null);
   const { socket } = React.useContext(SocketContext);
   const { success, error } = React.useContext(NotificationContext);
-  const [state, setState] = React.useState<IState>({ name: '', open: false });
-  const { open, name } = state;
+  const [name, setName] = React.useState<string>('');
 
   React.useEffect(() => {
     if(ref) {
-      open ? ref.focus() : ref.blur();
+      isOpen ? ref.focus() : ref.blur();
     }
-  }, [ref, open]);
+  }, [ref, isOpen]);
 
   const transition = {
     native: true,
     unique: true,
-    items: open,
+    items: isOpen,
     from: { opacity: 0, bottom: '-50px' },
     enter: { opacity: 1, bottom: '0px' },
     leave: { opacity: 0, bottom: '-50px' },
   };
 
-  const onClose = () => {
+  const handleClose = () => {
     document.activeElement && (document.activeElement as any).blur();
-    setState(state => ({ ...state, open: false }));
+    onClose();
   }
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setState(state => ({ ...state, name: value }));
-  };
 
   const onSubmit = (e) => {
     e.preventDefault();
     socket.command<ICreateCardReport>(CreateCardCommand(name)).then(report => {
       if(report.type === 'created') {
         success('Card created');
-        onClose();
+        handleClose();
         
       } else {
         error('Failed to create card');
@@ -65,31 +55,22 @@ export default () => {
   };
 
   const hotkeyHandlers = {
-    CLOSE: onClose,
-  };
-
-  const globalHandlers = {
-    OPEN: (event) => {
-      event.preventDefault();
-      setState({ open: true, name: '' });
-    },
+    CLOSE: handleClose,
   };
 
   return (
-    // <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers}>
-      <Transition {...transition}>
-        {show => props => show && (
-          <Shadow style={{ opacity: props.opacity }}>
-            <HotKeys keyMap={keyMap} handlers={hotkeyHandlers}>
-              <Modal style={{ bottom: props.bottom }} onSubmit={onSubmit}>
-                <Title>Add a New Card</Title>
-                <Input ref={setRef} type="text" value={name} onChange={onChange} onBlur={onClose} />
-              </Modal>
-            </HotKeys>
-          </Shadow>
-        )}
-      </Transition>
-    // </GlobalHotKeys>
+    <Transition {...transition}>
+      {show => props => show && (
+        <Shadow style={{ opacity: props.opacity }}>
+          <HotKeys keyMap={keyMap} handlers={hotkeyHandlers}>
+            <Modal style={{ bottom: props.bottom }} onSubmit={onSubmit}>
+              <Title>Add a New Card</Title>
+              <Input ref={setRef} type="text" value={name} onChange={e => setName(e.target.value)} onBlur={onClose} />
+            </Modal>
+          </HotKeys>
+        </Shadow>
+      )}
+    </Transition>
   );
 }
 

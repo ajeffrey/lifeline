@@ -18,8 +18,9 @@ export default withRouter(({ match }) => {
   return (
     <>
       <Menu style={{ width }}>
-        <Category label="Inbox" icon="inbox" url="/inbox" count={10} expanded={expanded} />
-        <Category label="Today" icon="calendar-day" url="/today" expanded={expanded} />
+        <Category label="Inbox" icon="fa fa-inbox" url="/inbox" count={10} expanded={expanded} />
+        <Category label="Todo" icon="far fa-check" url="/todo" expanded={expanded} />
+        <Category label="Today" icon="fa fa-calendar-day" url="/today" expanded={expanded} />
         <Expanse />
         <Toggle><ToggleIcon className={`far fa-chevron-left`} onClick={toggleExpanded} style={{ transform }} /></Toggle>
       </Menu>

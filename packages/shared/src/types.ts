@@ -14,8 +14,15 @@ export interface ICard {
   kind: IAnyCard['kind'];
 }
 
+export interface ISubTask {
+  id: string;
+  name: string;
+  complete: boolean;
+}
+
 export interface ITask extends ICard {
   kind: 'task';
+  subtasks: ISubTask[];
 }
 
 export interface IPending extends ICard {

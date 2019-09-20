@@ -21,7 +21,8 @@ const globalKeyMap = {
 const keyMap = {
   GO_UP: 'up',
   GO_DOWN: 'down',
-  SWITCH: 'tab',
+  DELETE: ['del', 'backspace'],
+  EDIT: 'enter',
 };
 
 export default React.memo(({ cards, selected, onSelect }: IProps) => {
@@ -29,6 +30,10 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
   const refMap = React.useMemo(() => new Map<string, HTMLDivElement>(), []);
   const { socket } = React.useContext(SocketContext);
   const { success, error } = React.useContext(NotificationContext);
+
+  React.useEffect(() => {
+    ref.current && selected && ref.current.focus();
+  }, [ref.current, selected]);
 
   const cardsTransition = {
     items: cards,
@@ -90,45 +95,47 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
   }
 
   const hotKeyHandlers = {
-    GO_UP: () => {
+    GO_UP: (event) => {
+      event.stopPropagation();
       console.log('UP');
       if(selected) {
         const previousCard = getPreviousCard(selected);
         console.log('previous = ', previousCard);
         if(previousCard) {
-          return selectCard(previousCard);
+          return onSelect(previousCard);
         }
       }
 
-      selectCard(selected);
+      onSelect(selected);
     },
-    GO_DOWN: () => {
+    GO_DOWN: (event) => {
+      event.stopPropagation();
       console.log('DOWN');
       if(selected) {
         const nextCard = getNextCard(selected);
         if(nextCard) {
-          selectCard(nextCard);
+          onSelect(nextCard);
         }
       }
     },
-    SWITCH: () => {
-
-    }
+    DELETE: (event) => {
+      selected && onDelete(selected);
+    },
   };
 
   const globalHandlers = {
     GO_DOWN: () => {
       console.log('GLOBAL');
       if(!selected) {
-        selectCard(cards[0]);
+        onSelect(cards[0]);
       }
     }
   };
 
   return (
-    <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers} allowChanges root>
+    <GlobalHotKeys keyMap={globalKeyMap} handlers={globalHandlers} allowChanges>
       <HotKeys keyMap={keyMap} handlers={hotKeyHandlers} allowChanges>
-        <CardList ref={ref}>
+        <CardList ref={ref} tabIndex={0} onFocus={() => selected || onSelect(cards[0])}>
           <Spring {...cursorSpring}>
             {props => <Cursor style={props}><i className="fal fa-chevron-right" /></Cursor>}
           </Spring>
@@ -136,11 +143,10 @@ export default React.memo(({ cards, selected, onSelect }: IProps) => {
             <Transition {...cardsTransition}>
               {card => props => (
                 <Card
-                  ref={node => node && refMap.set(card.id, node) && selected === card && node.focus()}
                   key={card.id}
                   card={card}
                   selected={card === selected}
-                  onFocus={() => onSelect(card)}
+                  onClick={() => onSelect(card)}
                   onDelete={() => onDelete(card)}
                   style={props}
                   />

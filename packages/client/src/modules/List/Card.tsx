@@ -7,8 +7,7 @@ import { Input as BaseInput } from 'src/components/Input';
 interface IProps {
   card: IAnyCard;
   selected: boolean;
-  onFocus(): any;
-  onDelete(): any;
+  onClick(): any;
   style?: any;
 }
 
@@ -24,18 +23,10 @@ interface IReadState {
 type IState = IEditingState | IReadState;
 
 const keyMap = {
-  DELETE: ['del', 'backspace'],
-  EDIT: 'enter',
 };
 
-export default React.forwardRef(({ card, selected, onFocus, onDelete, style }: IProps, ref: React.Ref<HTMLDivElement>) => {
+export default React.forwardRef(({ card, selected, onClick, style }: IProps, ref: React.Ref<HTMLDivElement>) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const handleDelete = (e) => {
-    e && e.preventDefault();
-    e && e.stopPropagation();
-    onDelete();
-  }
   
   const [state, setState] = React.useState<IState>({ type: 'read' });
 
@@ -50,7 +41,6 @@ export default React.forwardRef(({ card, selected, onFocus, onDelete, style }: I
   }
 
   const hotKeyHandlers = {
-    DELETE: handleDelete,
     EDIT: enableEditing,
   };
 
@@ -66,8 +56,7 @@ export default React.forwardRef(({ card, selected, onFocus, onDelete, style }: I
   }
   
   return (
-    <HotKeys keyMap={keyMap} handlers={hotKeyHandlers} allowChanges>
-      <Card ref={ref} tabIndex={state.type === 'editing' ? -1 : 0} key={card.id} selected={selected} onFocus={onFocus} style={style}>
+      <Card ref={ref} key={card.id} selected={selected} style={style} onClick={onClick}>
         {(() => {
           switch(state.type) {
             case 'read':
@@ -81,21 +70,8 @@ export default React.forwardRef(({ card, selected, onFocus, onDelete, style }: I
           }
         })()}
       </Card>
-    </HotKeys>
   );
 });
-
-const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 18px;
-  opacity: 0.25;
-  display: none;
-  padding: 0 5px;
-  &:hover {
-    opacity: 0.75;
-  }
-`;
 
 const Card = styled.div<{ selected: boolean }>`
   display: flex;
@@ -103,9 +79,6 @@ const Card = styled.div<{ selected: boolean }>`
   position: relative;
   margin-left: 10px;
   ${({ selected }) => selected && 'font-weight: 600'}
-  &:hover ${DeleteButton} {
-    display: block;
-  }
 `;
 
 const Name = styled.div<{ selected: boolean }>`

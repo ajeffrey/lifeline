@@ -1,3 +1,8 @@
+CREATE TABLE events (
+  eventType VARCHAR(40),
+  payload TEXT
+);
+
 CREATE TABLE users (
   id VARCHAR(255),
   name VARCHAR(255),

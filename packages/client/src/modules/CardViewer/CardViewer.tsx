@@ -1,51 +1,69 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { IAnyCard, ICard } from '@ll/shared/src/types';
-import { Transition, animated } from 'react-spring/renderprops';
+import { IAnyCard } from '@ll/shared/src/types';
+import { animated } from 'react-spring/renderprops';
 import { Title, Header } from 'src/styles';
-import Progress from './Progress';
-import CardType from './CardType';
+import Branch from './Branch';
+import TaskForm from './TaskForm';
 
 interface IProps {
   card: IAnyCard;
+  style?: any;
 }
 
-export default React.forwardRef(({ card }: IProps, ref: React.Ref<HTMLDivElement>) => {
-  const [state, setState] = React.useState<Partial<IAnyCard> & ICard>(card);
+interface ICardOption<T> {
+  key: T;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+const kinds: ICardOption<IAnyCard['kind']>[] = [
+  { key: 'task', icon: 'fal fa-check-circle', title: 'Task', description: 'A one-time task to do' },
+  { key: 'event', icon: 'fal fa-calendar-day', title: 'Event', description: 'A calendar event'},
+  { key: 'habit', icon: 'fal fa-repeat', title: 'Habit', description: 'A recurring task' },
+];
+
+export default React.forwardRef(({ card, style }: IProps, ref: React.Ref<HTMLDivElement>) => {
+  const [state, setState] = React.useState<IAnyCard>(card);
 
   const setKind = (kind: IAnyCard['kind']) => {
+    const { id, creatorId, name } = card;
+    const rest = { id, creatorId, name, kind };
+
     switch(kind) {
       case 'task':
-        return setState(({ id, creatorId, name }) => ({ id, creatorId, name, kind: 'task' }));
-      case 'pending':
-        return setState(({ id, creatorId, name }) => ({ id, creatorId, name, kind: 'pending' }));
-      case 'event':
-        return setState(({ id, creatorId, name }) => ({ id, creatorId, name, kind: 'event' }));
+        return setState({ subtasks: [], ...rest});
+      default:
+        return setState({ ...rest, kind });
     }
-  }
-  
-  const paneTransition = {
-    native: true,
-    unique: true,
-    items: card,
-    from: { opacity: 0, right: '-10px' },
-    enter: { opacity: 1, right: '0px' },
-    leave: { opacity: 0, right: '-10px' },
   };
 
   return (
-    <Transition {...paneTransition}>
-      {card => props => card && (
-        <CardViewer style={props} ref={ref}>
-          <Header>
-            <Title>{card.name}</Title>
-          </Header>
-          <Progress steps={3} current={0} />
-          <Question>What type of card is this?</Question>
-          <CardType value={state.kind} onChange={kind => setKind(kind)} />
-        </CardViewer>
-      )}
-    </Transition>
+    <CardViewer style={style} ref={ref}>
+      <Header>
+        <Title>{card.name}</Title>
+      </Header>
+      {(() => {
+        switch(state.kind) {
+          case 'pending':
+            return (
+              <>
+                <Question>What type of card is this?</Question>
+                <Branches>
+                  {kinds.map(({ key, icon, title, description }) => (
+                    <Branch key={key} icon={icon} title={title} description={description} onClick={() => setKind(key)} selected={state.kind === key} />
+                  ))}
+                </Branches>
+              </>
+            );
+          case 'task':
+            return (
+              <TaskForm task={state} onChange={setState} />
+            );
+        }
+      })()}
+    </CardViewer>
   );
 });
 
@@ -65,6 +83,11 @@ const Question = styled.div`
 
 const Branches = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-self: flex-start;
+`;
+
+const SubTasks = styled.div`
+  border-left: 2px solid #333;
+  padding-left: 10px;
 `;

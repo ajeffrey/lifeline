@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { InboxQuery, IInboxState } from '@ll/shared/src/queries/InboxQuery';
+import { Transition } from 'react-spring/renderprops';
 import useQuery from 'src/lib/useQuery';
 import List from '../List';
 import { IAnyCard } from '@ll/shared/src/types';
@@ -14,9 +15,10 @@ export default React.memo(() => {
   if(!cards) {
     return null;
   }
+  
+  console.log('CARDS', cards);
 
   const setSelected = (card: IAnyCard | null) => {
-    console.log('SELECT CARD', card);
     setSelectedId(card ? card.id : null);
   }
 
@@ -40,7 +42,9 @@ export default React.memo(() => {
         </Header>
         <List cards={cards} selected={selected} onSelect={setSelected} />
       </InboxPane>
-      {selected && <CardViewer card={selected} />}
+      <Transition native unique items={selected} from={{ opacity: 0, right: '-10px' }} enter={{ opacity: 1, right: '0px' }} leave={{ opacity: 0, right: '-10px' }}>
+      {selected => props => selected && <CardViewer card={selected} style={props} />}
+      </Transition>
     </>
   );
 });
