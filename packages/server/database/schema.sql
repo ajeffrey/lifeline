@@ -1,5 +1,8 @@
 CREATE TABLE events (
+  id INTEGER PRIMARY KEY,
   eventType VARCHAR(40),
+  tenantId VARCHAR(255),
+  createdAt UNSIGNED BIGINT,
   payload TEXT
 );
 
@@ -12,14 +15,4 @@ CREATE TABLE users (
 
 CREATE INDEX users_id ON users (id);
 CREATE INDEX users_email ON users (email);
-
-CREATE TABLE cards (
-  id VARCHAR(255),
-  type VARCHAR(10),
-  creatorId INTEGER,
-  name VARCHAR(255),
-  kind VARCHAR(255)
-);
-
-CREATE INDEX cards_id ON cards (id);
-CREATE INDEX cards_creatorId ON cards (creatorId);
+CREATE INDEX events_sift ON events (tenantId, createdAt);

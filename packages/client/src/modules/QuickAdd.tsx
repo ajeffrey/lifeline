@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { HotKeys, GlobalHotKeys } from 'react-hotkeys';
+import { HotKeys } from 'react-hotkeys';
 import { CreateCardCommand, ICreateCardReport } from '@ll/shared/src/commands/CreateCardCommand';
 import SocketContext from 'src/API/SocketContext';
 import NotificationContext from 'src/contexts/NotificationContext';

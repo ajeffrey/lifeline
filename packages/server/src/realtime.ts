@@ -10,10 +10,7 @@ import LoginCommandHandler from './commands/LoginCommandHandler';
 import ReauthCommandHandler from './commands/ReauthCommandHandler';
 import { IAnyEvent } from '@ll/shared/src/events';
 import CreateCardCommandHandler from './commands/CreateCardCommandHandler';
-import CardCreatedEventHandler from './events/CardCreatedEventHandler';
-import EventHandler from './EventHandler';
 import InboxQuery from './queries/InboxQuery';
-import CardDeletedEventHandler from './events/CardDeletedEventHandler';
 import DeleteCardCommandHandler from './commands/DeleteCardCommandHandler';
 
 export default (db: Database, publicKey: string, privateKey: string) => {
@@ -23,13 +20,6 @@ export default (db: Database, publicKey: string, privateKey: string) => {
   const reauthCommandHandler = new ReauthCommandHandler(publicKey);
   const createCardCommandHandler = new CreateCardCommandHandler(events$);
   const deleteCardCommandHandler = new DeleteCardCommandHandler(events$);
-
-  const eventHandler = new EventHandler(db);
-  const cardCreatedEventHandler = new CardCreatedEventHandler(db);
-  const cardDeletedEventHandler = new CardDeletedEventHandler(db);
-  eventHandler.register('card-created', cardCreatedEventHandler);
-  eventHandler.register('card-deleted', cardDeletedEventHandler);
-  events$.subscribe(event => eventHandler.handle(event));
 
   const inboxQuery = new InboxQuery(db, events$);
 

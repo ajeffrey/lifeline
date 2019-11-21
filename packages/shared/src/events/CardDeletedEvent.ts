@@ -1,6 +1,6 @@
-import { ICard } from "../types";
+import { IBaseEvent } from "./BaseEvent";
 
-export interface ICardDeletedEvent {
+export interface ICardDeletedEvent extends IBaseEvent {
   type: 'card-deleted';
   payload: {
     id: string;
